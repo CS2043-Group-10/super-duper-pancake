@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 
+
 public class Main {
 
     public static void main(String[] args) {
@@ -25,10 +26,11 @@ public class Main {
             try(Scanner scanner = new Scanner(new File(path + fileName))){
 
                 while(scanner.hasNextLine()){
-                    int question = scanner.nextInt();
+                    String question = scanner.nextLine();
                     String answer = scanner.nextLine();
                     if(scanner.nextLine() == "$"){
                         scanner.skip("$");
+                        String garbageAfter = scanner.nextLine();
                     }
                 }
 
@@ -38,6 +40,7 @@ public class Main {
         }
         catch(FileNotFoundException fnfe){
             System.out.println("fnfe exception");
+            fnfe.printStackTrace();
         }
 
     }
