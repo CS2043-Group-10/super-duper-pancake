@@ -20,7 +20,7 @@ public class Main {
 
     }
 
-    static void readTextFile(String path, String fileName) {
+    static void readTextFile(String path, String fileName)throws NoSuchElementException{
 
         try{
             try(Scanner scanner = new Scanner(new File(path + fileName))){
@@ -41,6 +41,9 @@ public class Main {
         catch(FileNotFoundException fnfe){
             System.out.println("fnfe exception");
             fnfe.printStackTrace();
+        }
+        catch(NoSuchElementException nsee){
+            System.out.println("nsee ecxeption");
         }
 
     }
