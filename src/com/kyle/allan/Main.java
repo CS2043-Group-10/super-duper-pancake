@@ -14,6 +14,9 @@ public class Main {
         String fileName = scan.nextLine();
         System.out.println("Path?");
         String path = scan.nextLine();
+        path = path.replace("\\","\\\\");
+        path = path + "\\\\";
+        //System.out.println(path);
         readTextFile(path, fileName);
 
 
@@ -25,7 +28,6 @@ public class Main {
         String questionDescription = null;
         String answer = null;
         Exam exam = new Exam();
-
 
 
         try{
@@ -51,10 +53,7 @@ public class Main {
         catch(NoSuchElementException nsee){
             System.out.println("nsee ecxeption");
         }
-        //System.out.println(questionNumber + " " + questionDescription + " " + answer);
         exam.printExam();
-
-
 
     }
 
