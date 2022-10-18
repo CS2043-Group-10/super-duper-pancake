@@ -1,6 +1,5 @@
 package com.kyle.allan;
 
-import java.io.*;
 import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,20 +19,27 @@ public class Main {
 
     }
 
-    static void readTextFile(String path, String fileName)throws NoSuchElementException{
+    static void readTextFile(String path, String fileName){
+
+        Integer questionNumber = null;
+        String questionDescription = null;
+        String answer = null;
+        Exam exam = new Exam();
+
+
 
         try{
-            try(Scanner scanner = new Scanner(new File(path + fileName))){
+            try(Scanner fileScanner = new Scanner(new File(path + fileName))){
 
-                while(scanner.hasNextLine()){
-                    String question = scanner.nextLine();
-                    String answer = scanner.nextLine();
-                    if(scanner.nextLine() == "$"){
-                        scanner.skip("$");
-                        String garbageAfter = scanner.nextLine();
-                    }
+                while(fileScanner.hasNextLine()){
+                    Scanner lineScanner = new Scanner(fileScanner.nextLine());
+                    lineScanner.useDelimiter("<>");
+                    questionNumber = lineScanner.nextInt();
+                    questionDescription = lineScanner.next();
+                    answer = lineScanner.next();
+                    Question question = new Question(questionNumber,questionDescription,answer);
+                    exam.addToExam(question);
                 }
-
 
             }
 
@@ -45,6 +51,10 @@ public class Main {
         catch(NoSuchElementException nsee){
             System.out.println("nsee ecxeption");
         }
+        //System.out.println(questionNumber + " " + questionDescription + " " + answer);
+        exam.printExam();
+
+
 
     }
 
