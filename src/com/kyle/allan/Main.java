@@ -45,8 +45,7 @@ public class Main {
 
         }
         catch(FileNotFoundException fnfe){
-            System.out.println("fnfe exception");
-            fnfe.printStackTrace();
+            System.out.println("File could not be found.");
         }
         catch(NoSuchElementException nsee){
             System.out.println("nsee ecxeption");
