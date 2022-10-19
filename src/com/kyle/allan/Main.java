@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 public class Main {
 
     public static void main(String[] args) {
+
         Scanner scan = new Scanner(System.in);
         System.out.println("Filename?");
         String fileName = scan.nextLine();
@@ -16,9 +17,7 @@ public class Main {
         String path = scan.nextLine();
         path = path.replace("\\","\\\\");
         path = path + "\\\\";
-        //System.out.println(path);
         readTextFile(path, fileName);
-
 
     }
 
@@ -28,7 +27,6 @@ public class Main {
         String questionDescription = null;
         String answer = null;
         Exam exam = new Exam();
-
 
         try{
             try(Scanner fileScanner = new Scanner(new File(path + fileName))){
