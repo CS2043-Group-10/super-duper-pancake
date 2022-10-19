@@ -48,7 +48,7 @@ public class Main {
             System.out.println("File could not be found.");
         }
         catch(NoSuchElementException nsee){
-            System.out.println("nsee ecxeption");
+            System.out.println("nsee exception");
         }
         exam.printExam();
 
