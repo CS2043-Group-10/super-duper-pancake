@@ -24,4 +24,16 @@ public class Question {
                 ", answer='" + answer + '\'' +
                 '}';
     }
+
+    public Integer getQuestionNumber() {
+        return questionNumber;
+    }
+
+    public String getQuestionDescription() {
+        return questionDescription;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
 }

@@ -5,6 +5,10 @@ import java.util.ArrayList;
 public class Exam {
 
     ArrayList<Question> examQuestions = new ArrayList<>();
+    String name;
+    boolean isOpen;
+
+
 
     public void addToExam(Question question){
         examQuestions.add(question);
