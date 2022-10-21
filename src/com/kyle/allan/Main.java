@@ -16,7 +16,7 @@ public class Main {
         System.out.println("Path?");
         String path = scan.nextLine();
         path = path.replace("\\","\\\\");
-        path = path + "\\\\";
+        path = path.concat("\\");
         readTextFile(path, fileName);
 
     }
