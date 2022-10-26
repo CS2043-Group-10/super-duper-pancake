@@ -14,19 +14,19 @@ public class Main {
 
 
             Scanner scan = new Scanner(System.in);
+            int instID = 1;
             System.out.println("What is the exam name?");
             String examName = scan.nextLine();
             System.out.println("Do you want this exam to be open?\nType \"true\" for yes:\nType \"false\" for no:");
             boolean isOpen = scan.nextBoolean();
-            System.out.println("Filename?");
+            String garbage = scan.nextLine();
+            System.out.println("What is the filename?");
             String fileName = scan.nextLine();
-            System.out.println("Path?");
+            System.out.println("What is the path?");
             String path = scan.nextLine();
             path = path.replace("\\","\\\\");
             path = path.concat("\\");
-            createExam(path, fileName);
-
-
+            createExam(path, fileName, examName, instID, isOpen);
 
 
 
@@ -34,7 +34,7 @@ public class Main {
 
     }
 
-    static void createExam(String path, String fileName){
+    static void createExam(String path, String fileName, String examName, int instID, boolean isOpen){
 
         Integer questionNumber = null;
         String questionDescription = null;
@@ -44,12 +44,17 @@ public class Main {
         try{
             String connectionString = "jdbc:mysql://47.54.75.83:3306/oems";
             Connection con = DriverManager.getConnection(connectionString, "test", "password");
-            Statement command = con.createStatement();
+
 
 
             try{
                 try(Scanner fileScanner = new Scanner(new File(path + fileName))){
 
+                    PreparedStatement PrepStat = con.prepareStatement("INSERT into EXAM values (default, ?, ?, ?)");
+                    PrepStat.setString(1,examName);
+                    PrepStat.setInt(2,instID);
+                    PrepStat.setBoolean(3,isOpen);
+                    PrepStat.execute();
 
                     while(fileScanner.hasNextLine()){
                         Scanner lineScanner = new Scanner(fileScanner.nextLine());
@@ -77,6 +82,7 @@ public class Main {
 
         }catch(SQLException s){
             System.out.println("sql exception");
+            s.printStackTrace();
         }
 
 
