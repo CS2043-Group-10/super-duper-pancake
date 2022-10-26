@@ -39,7 +39,7 @@ public class Main {
         Integer questionNumber = null;
         String questionDescription = null;
         String answer = null;
-        Exam exam = new Exam();
+        Exam exam = new Exam(examName, instID);
 
         try{
             String connectionString = "jdbc:mysql://47.54.75.83:3306/oems";

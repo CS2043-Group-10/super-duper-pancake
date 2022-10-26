@@ -5,10 +5,28 @@ import java.util.ArrayList;
 public class Exam {
 
     ArrayList<Question> examQuestions = new ArrayList<>();
-    String name;
+    String examName;
     boolean isOpen;
+    int institutionID;
 
+    Exam(String examName,int institutionID){
 
+        this.examName = examName;
+        this.institutionID = institutionID;
+
+    }
+
+    public String getExamName() {
+        return examName;
+    }
+
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    public int getInstitutionID() {
+        return institutionID;
+    }
 
     public void addToExam(Question question){
         examQuestions.add(question);
