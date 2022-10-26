@@ -9,10 +9,11 @@ public class Exam {
     boolean isOpen;
     int institutionID;
 
-    Exam(String examName,int institutionID){
+    Exam(String examName,int institutionID,boolean isOpen){
 
         this.examName = examName;
         this.institutionID = institutionID;
+        this.isOpen = isOpen;
 
     }
 
