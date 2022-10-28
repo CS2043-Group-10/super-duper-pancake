@@ -30,8 +30,6 @@ public class Main {
 
 
 
-
-
     }
 
     static void createExam(String path, String fileName, String examName, int instID, boolean isOpen){
@@ -41,20 +39,12 @@ public class Main {
         String answer = null;
         Exam exam = new Exam(examName, instID, isOpen);
 
-        try{
-            String connectionString = "jdbc:mysql://47.54.75.83:3306/oems";
-            Connection con = DriverManager.getConnection(connectionString, "test", "password");
-
 
 
             try{
                 try(Scanner fileScanner = new Scanner(new File(path + fileName))){
 
-                    PreparedStatement PrepStat = con.prepareStatement("INSERT into EXAM values (default, ?, ?, ?)");
-                    PrepStat.setString(1,examName);
-                    PrepStat.setInt(2,instID);
-                    PrepStat.setBoolean(3,isOpen);
-                    PrepStat.execute();
+                    insertExam(examName,instID,isOpen);
 
                     while(fileScanner.hasNextLine()){
                         Scanner lineScanner = new Scanner(fileScanner.nextLine());
@@ -78,13 +68,24 @@ public class Main {
             }
             exam.printExam();
 
+    }
 
+    static void insertExam(String examName, int instID, boolean isOpen){
+
+        try{
+            String connectionString = "jdbc:mysql://47.54.75.83:3306/oems";
+            Connection con = DriverManager.getConnection(connectionString, "test", "password");
+
+            PreparedStatement PrepStat = con.prepareStatement("INSERT into EXAM values (default, ?, ?, ?)");
+            PrepStat.setString(1,examName);
+            PrepStat.setInt(2,instID);
+            PrepStat.setBoolean(3,isOpen);
+            PrepStat.execute();
 
         }catch(SQLException s){
             System.out.println("sql exception");
             s.printStackTrace();
         }
-
 
 
     }
