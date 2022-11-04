@@ -110,7 +110,7 @@ public class Main {
             int exam_id = ResSet.getInt(1);
 
 
-            PreparedStatement PrepStat = con.prepareStatement("INSERT into QUESTION values(default, ?, ?, ?)");
+            PreparedStatement PrepStat = con.prepareStatement("INSERT into QUESTION values(1, ?, ?, ?)");
             PrepStat.setInt(1,exam_id);
             PrepStat.setString(2,questionDescription);
             PrepStat.setString(3,questionAnswer);
