@@ -6,23 +6,21 @@ public class Exam {
 
     ArrayList<Question> examQuestions = new ArrayList<>();
     String examName;
-    boolean isOpen;
     int institutionID;
+    String startDate;
+    String endDate;
 
-    Exam(String examName,int institutionID,boolean isOpen){
+    Exam(String examName,int institutionID,String startDate,String endDate){
 
         this.examName = examName;
         this.institutionID = institutionID;
-        this.isOpen = isOpen;
+        this.startDate = startDate;
+        this.endDate = endDate;
 
     }
 
     public String getExamName() {
         return examName;
-    }
-
-    public boolean isOpen() {
-        return isOpen;
     }
 
     public int getInstitutionID() {

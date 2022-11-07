@@ -14,22 +14,49 @@ public class Main {
             String connectionString = "jdbc:mysql://47.54.75.83:3306/oems";
             Connection con = DriverManager.getConnection(connectionString, "test", "password");
 
+
             if(con != null){
 
                 Scanner scan = new Scanner(System.in);
                 int instID = 1;
                 System.out.println("What is the exam name?");
                 String examName = scan.nextLine();
-                System.out.println("Do you want this exam to be open?\nType \"true\" for yes:\nType \"false\" for no:");
-                boolean isOpen = scan.nextBoolean();
-                String garbage = scan.nextLine();
+                System.out.println("When does this exam start? (yyyy-mm-dd)");
+                String examStartDate = scan.nextLine();
+                System.out.println("When does this exam end? (yyyy-mm-dd)");
+                String examEndDate = scan.nextLine();
                 System.out.println("What is the filename?");
                 String fileName = scan.nextLine();
                 System.out.println("What is the path?");
                 String path = scan.nextLine();
                 path = path.replace("\\","\\\\");
                 path = path.concat("\\");
-                createExam(path, fileName, examName, instID, isOpen,con);
+                createExam(path, fileName, examName, instID, examStartDate, examEndDate, con);
+
+
+                System.out.println("Do you want to add a grade? If so type \"true\": If no type \"false\":");
+                boolean addAGrade = scan.nextBoolean();
+                String garbage = scan.nextLine();
+                if(addAGrade == true ){
+                    System.out.println("Enter the grade to be added:");
+                    double grade = scan.nextDouble();
+                    garbage = scan.nextLine();
+                    System.out.println("What is the question id?");
+                    int questionID = scan.nextInt();
+                    garbage = scan.nextLine();
+                    System.out.println("Was the answer correct? Type \"Right\" for correct:\nType \"Wrong\" for incorrect:");
+                    String answerOutcome = scan.nextLine();
+
+                    PreparedStatement PrepStat = con.prepareStatement("Select exam_id from EXAM where exam_name = ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                    PrepStat.setString(1,examName);
+                    ResultSet ResSet = PrepStat.executeQuery();
+                    ResSet.first();
+                    int exam_id = ResSet.getInt(1);
+
+                    addGradeForQuestion(con,1,exam_id,questionID,grade,answerOutcome);
+                }
+
+
 
 
             }
@@ -40,19 +67,19 @@ public class Main {
 
     }
 
-    static void createExam(String path, String fileName, String examName, int instID, boolean isOpen, Connection con){
+    static void createExam(String path, String fileName, String examName, int instID, String startDate, String endDate,Connection con){
 
         Integer questionNumber = null;
         String questionDescription = null;
         String answer = null;
-        Exam exam = new Exam(examName, instID, isOpen);
+        Exam exam = new Exam(examName, instID, startDate, endDate);
 
 
 
             try{
                 try(Scanner fileScanner = new Scanner(new File(path + fileName))){
 
-                    insertExam(examName,instID,isOpen,con);
+                    insertExam(examName,instID, startDate, endDate, con);
 
                     while(fileScanner.hasNextLine()){
                         Scanner lineScanner = new Scanner(fileScanner.nextLine());
@@ -79,14 +106,15 @@ public class Main {
 
     }
 
-    static void insertExam(String examName, int instID, boolean isOpen, Connection con){
+    static void insertExam(String examName, int instID, String startDate,String endDate, Connection con){
 
         try{
 
-            PreparedStatement PrepStat = con.prepareStatement("INSERT into EXAM values (default, ?, ?, ?)");
+            PreparedStatement PrepStat = con.prepareStatement("INSERT into EXAM values (default, ?, ?, ?, ?)");
             PrepStat.setString(1,examName);
             PrepStat.setInt(2,instID);
-            PrepStat.setBoolean(3,isOpen);
+            PrepStat.setString(3,startDate);
+            PrepStat.setString(4,endDate);
             PrepStat.execute();
 
         }catch(SQLException s){
@@ -121,6 +149,30 @@ public class Main {
             System.out.println("sql exception");
             s.printStackTrace();
         }
+
+    }
+
+    static void addGradeForQuestion(Connection con, int userID, int examID, int questionID, double score, String answerOutcome){
+
+        try{
+
+            PreparedStatement PrepStat = con.prepareStatement("INSERT into participant_answer values(?, ?, ?, ?, ?)");
+            PrepStat.setInt(1,userID);
+            PrepStat.setInt(2,examID);
+            PrepStat.setInt(3,questionID);
+            PrepStat.setString(4,answerOutcome);
+            PrepStat.setDouble(5,score);
+            PrepStat.executeUpdate();
+
+
+        }catch(SQLException s){
+        System.out.println("sql exception");
+        s.printStackTrace();
+    }
+
+
+
+
 
     }
 
