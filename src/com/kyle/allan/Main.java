@@ -53,7 +53,7 @@ public class Main {
                     ResSet.first();
                     int exam_id = ResSet.getInt(1);
 
-                    addGradeForQuestion(con,1,exam_id,questionID,grade,answerOutcome);
+                    addGradeForQuestion(con,1,4,questionID,grade,answerOutcome);
                 }
 
 
