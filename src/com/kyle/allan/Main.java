@@ -1,5 +1,6 @@
 package com.kyle.allan;
 
+import java.sql.Date;
 import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,9 +23,9 @@ public class Main {
                 System.out.println("What is the exam name?");
                 String examName = scan.nextLine();
                 System.out.println("When does this exam start? (yyyy-mm-dd)");
-                String examStartDate = scan.nextLine();
+                Date examStartDate = Date.valueOf(scan.nextLine());
                 System.out.println("When does this exam end? (yyyy-mm-dd)");
-                String examEndDate = scan.nextLine();
+                Date examEndDate = Date.valueOf(scan.nextLine());
                 System.out.println("What is the filename?");
                 String fileName = scan.nextLine();
                 System.out.println("What is the path?");
@@ -34,15 +35,15 @@ public class Main {
                 createExam(path, fileName, examName, instID, examStartDate, examEndDate, con);
 
 
-                System.out.println("Do you want to add a grade? If so type \"true\": If no type \"false\":");
+                System.out.println("Do you want to add a grade for an exam? If so type \"true\": If no type \"false\":");
                 boolean addAGrade = scan.nextBoolean();
                 String garbage = scan.nextLine();
                 if(addAGrade == true ){
-                    System.out.println("Enter the grade to be added:");
-                    double grade = scan.nextDouble();
-                    garbage = scan.nextLine();
                     System.out.println("What is the question id?");
                     int questionID = scan.nextInt();
+                    garbage = scan.nextLine();
+                    System.out.println("Enter the grade to be added:");
+                    double grade = scan.nextDouble();
                     garbage = scan.nextLine();
                     System.out.println("Was the answer correct? Type \"Right\" for correct:\nType \"Wrong\" for incorrect:");
                     String answerOutcome = scan.nextLine();
@@ -53,7 +54,7 @@ public class Main {
                     ResSet.first();
                     int exam_id = ResSet.getInt(1);
 
-                    addGradeForQuestion(con,1,4,questionID,grade,answerOutcome);
+                    addGradeForQuestion(con,1,3,questionID,grade,answerOutcome);
                 }
 
 
@@ -67,7 +68,7 @@ public class Main {
 
     }
 
-    static void createExam(String path, String fileName, String examName, int instID, String startDate, String endDate,Connection con){
+    static void createExam(String path, String fileName, String examName, int instID, Date startDate, Date endDate,Connection con){
 
         Integer questionNumber = null;
         String questionDescription = null;
@@ -106,15 +107,15 @@ public class Main {
 
     }
 
-    static void insertExam(String examName, int instID, String startDate,String endDate, Connection con){
+    static void insertExam(String examName, int instID, Date startDate, Date endDate, Connection con){
 
         try{
 
             PreparedStatement PrepStat = con.prepareStatement("INSERT into EXAM values (default, ?, ?, ?, ?)");
             PrepStat.setString(1,examName);
             PrepStat.setInt(2,instID);
-            PrepStat.setString(3,startDate);
-            PrepStat.setString(4,endDate);
+            PrepStat.setDate(3,startDate);
+            PrepStat.setDate(4,endDate);
             PrepStat.execute();
 
         }catch(SQLException s){
@@ -152,7 +153,7 @@ public class Main {
 
     }
 
-    static void addGradeForQuestion(Connection con, int userID, int examID, int questionID, double score, String answerOutcome){
+    static void addGradeForQuestion(Connection con, int userID, int examID, int questionID, double score, String theirAnswer){
 
         try{
 
@@ -160,7 +161,7 @@ public class Main {
             PrepStat.setInt(1,userID);
             PrepStat.setInt(2,examID);
             PrepStat.setInt(3,questionID);
-            PrepStat.setString(4,answerOutcome);
+            PrepStat.setString(4,theirAnswer);
             PrepStat.setDouble(5,score);
             PrepStat.executeUpdate();
 

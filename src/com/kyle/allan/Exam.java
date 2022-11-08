@@ -1,5 +1,6 @@
 package com.kyle.allan;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class Exam {
@@ -7,10 +8,10 @@ public class Exam {
     ArrayList<Question> examQuestions = new ArrayList<>();
     String examName;
     int institutionID;
-    String startDate;
-    String endDate;
+    Date startDate;
+    Date endDate;
 
-    Exam(String examName,int institutionID,String startDate,String endDate){
+    Exam(String examName,int institutionID,Date startDate,Date endDate){
 
         this.examName = examName;
         this.institutionID = institutionID;
