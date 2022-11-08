@@ -6,13 +6,15 @@ public class Question {
     Integer questionNumber;
     String questionDescription;
     String answer;
+    Integer score;
 
 
-    Question(Integer questionNumber, String questionDescription, String answer){
+    Question(Integer questionNumber, String questionDescription, String answer, Integer score){
 
         this.questionNumber = questionNumber;
         this.questionDescription = questionDescription;
         this.answer = answer;
+        this.score = score;
 
     }
 

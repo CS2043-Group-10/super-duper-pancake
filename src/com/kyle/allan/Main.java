@@ -73,6 +73,7 @@ public class Main {
         Integer questionNumber = null;
         String questionDescription = null;
         String answer = null;
+        Integer score = null;
         Exam exam = new Exam(examName, instID, startDate, endDate);
 
 
@@ -88,9 +89,11 @@ public class Main {
                         questionNumber = lineScanner.nextInt();
                         questionDescription = lineScanner.next();
                         answer = lineScanner.next();
-                        Question question = new Question(questionNumber,questionDescription,answer);
+                        score = lineScanner.nextInt();
+
+                        Question question = new Question(questionNumber,questionDescription,answer,score);
                         exam.addToExam(question);
-                        insertQuestion(con,examName,questionDescription,answer);
+                        insertQuestion(con,examName,questionDescription,answer,score);
 
                     }
 
@@ -126,7 +129,7 @@ public class Main {
 
     }
 
-    static void insertQuestion(Connection con, String examName, String questionDescription, String questionAnswer){
+    static void insertQuestion(Connection con, String examName, String questionDescription, String questionAnswer, Integer score){
 
         try{
 
@@ -139,10 +142,11 @@ public class Main {
             int exam_id = ResSet.getInt(1);
 
 
-            PreparedStatement PrepStat = con.prepareStatement("INSERT into QUESTION values(1, ?, ?, ?, 10)");
+            PreparedStatement PrepStat = con.prepareStatement("INSERT into QUESTION values(1, ?, ?, ?, ?)");
             PrepStat.setInt(1,exam_id);
             PrepStat.setString(2,questionDescription);
             PrepStat.setString(3,questionAnswer);
+            PrepStat.setInt(4,score);
             PrepStat.executeUpdate();
 
 
