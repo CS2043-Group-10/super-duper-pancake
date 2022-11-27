@@ -185,7 +185,7 @@ public class Institution {
                 String question = rS.getString(2);
                 String answer = rS.getString(3);
                 String userAnswer = rS.getString(4);
-                AnsweredQuestion temp = new AnsweredQuestion(questionID, question, answer, userAnswer, userID, examID);
+                AnsweredQuestion temp = new AnsweredQuestion(questionID, question, userAnswer, answer, userID, examID);
                 answeredList.add(temp);
             }
 
@@ -379,7 +379,33 @@ public class Institution {
 
     }
 
+    public ArrayList<Question> viewQuestions(Connection con, Exam exam) {
 
+        ArrayList<Question> questionList = new ArrayList<Question>();
+
+        int examID = exam.getID(con);
+
+        try {
+
+            PreparedStatement pS2 = con.prepareStatement("SELECT question_id, question_q, question_a, question_grade FROM QUESTION WHERE exam_id = ?");
+            pS2.setInt(1, examID);
+            ResultSet rS2 = pS2.executeQuery();
+            while (rS2.next()) {
+                int questionID = rS2.getInt(1);
+                String question = rS2.getString(2);
+                String answer= rS2.getString(3);
+                int grade = rS2.getInt(4);
+                Question tempQuestion = new Question(questionID, question, answer, grade);
+                questionList.add(tempQuestion);
+            }
+
+        } catch (SQLException sqle2) {
+            sqle2.printStackTrace();
+
+        }
+
+        return questionList;
+    }
 
 
 
