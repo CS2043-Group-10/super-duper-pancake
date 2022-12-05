@@ -8,7 +8,7 @@ public class Login {
 
     }
 
-    public int processLogin(int loginType, String userName, String passWord, Connection con) {
+    public boolean processLogin(int loginType, String userName, String passWord, Connection con) {
 
 
         try {
@@ -22,7 +22,7 @@ public class Login {
                     validateUser.executeUpdate();
                     String outParamVU = validateUser.getString(2);
                     if (Objects.equals(passWord, outParamVU)) {
-                        return 1;
+                        return true;
                     }
                 }
                 case 2 -> {
@@ -33,7 +33,7 @@ public class Login {
                     validateInstitution.executeUpdate();
                     String outParamVI = validateInstitution.getString(2);
                     if (Objects.equals(passWord, outParamVI)) {
-                        return 2;
+                        return true;
                     }
 
                 }
@@ -45,7 +45,7 @@ public class Login {
                     validateAdmin.executeUpdate();
                     String outParamVA = validateAdmin.getString(2);
                     if (Objects.equals(passWord, outParamVA)) {
-                        return 3;
+                        return true;
                     }
                 }
             }
@@ -53,7 +53,7 @@ public class Login {
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
-        return 0;
+        return false;
     }
 
     public void createUser(Connection con, String userName, String userPass, String userEmail, int instID) {

@@ -264,7 +264,7 @@ public class User {
 
         try {
 
-            PreparedStatement pS2 = con.prepareStatement("SELECT exam_name, institution_id, exam_start, exam_end FROM PARTICIPANT NATURAL JOIN EXAM where user_id = ? and participant_isreg = 1 and participant_complete = 1");
+            PreparedStatement pS2 = con.prepareStatement("SELECT exam_name, institution_id, exam_start, exam_end FROM PARTICIPANT NATURAL JOIN EXAM where user_id = ? and participant_isreg = 1 and participant_complete = 1 and sysdate() > exam_end");
             pS2.setInt(1,userID);
 
             ResultSet rS2 = pS2.executeQuery();

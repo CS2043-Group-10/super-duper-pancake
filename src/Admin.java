@@ -135,12 +135,10 @@ public class Admin {
     public ArrayList<User> getUsers(Connection con) {
 
         ArrayList<User> userList = new ArrayList<>();
-        int instID = getID(con);
 
         try {
 
             PreparedStatement pS = con.prepareStatement("SELECT user_name FROM USER");
-            pS.setInt(1,instID);
             ResultSet rS = pS.executeQuery();
             while (rS.next()) {
                 String userName = rS.getString(1);

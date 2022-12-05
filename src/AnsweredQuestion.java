@@ -6,8 +6,9 @@ public class AnsweredQuestion {
     private String realAnswer;
     private int examID;
     private int userID;
+    private int grade;
 
-    AnsweredQuestion(int pos, String question, String userAnswer, String realAnswer, int user, int exam) {
+    AnsweredQuestion(int pos, String question, String userAnswer, String realAnswer, int user, int exam, int grade) {
 
         position = pos;
         this.question = question;
@@ -15,6 +16,7 @@ public class AnsweredQuestion {
         this.realAnswer = realAnswer;
         userID = user;
         examID = exam;
+        this.grade = grade;
     }
 
 
@@ -32,6 +34,10 @@ public class AnsweredQuestion {
 
     public String getRealAnswer() {
         return realAnswer;
+    }
+
+    public int getGrade() {
+        return grade;
     }
 
 

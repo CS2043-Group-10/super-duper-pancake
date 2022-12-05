@@ -176,7 +176,7 @@ public class Institution {
 
         try {
 
-            PreparedStatement pS = con.prepareStatement("SELECT question_id, question_q, question_a, participant_answer_a FROM QUESTION NATURAL JOIN PARTICIPANT_ANSWER WHERE user_id = ? AND exam_id = ?");
+            PreparedStatement pS = con.prepareStatement("SELECT question_id, question_q, question_a, participant_answer_a, question_grade FROM QUESTION NATURAL JOIN PARTICIPANT_ANSWER WHERE user_id = ? AND exam_id = ?");
             pS.setInt(1, userID);
             pS.setInt(2,examID);
             ResultSet rS = pS.executeQuery();
@@ -185,7 +185,8 @@ public class Institution {
                 String question = rS.getString(2);
                 String answer = rS.getString(3);
                 String userAnswer = rS.getString(4);
-                AnsweredQuestion temp = new AnsweredQuestion(questionID, question, answer, userAnswer, userID, examID);
+                int questionGrade = rS.getInt(5);
+                AnsweredQuestion temp = new AnsweredQuestion(questionID, question, userAnswer, answer, userID, examID, questionGrade);
                 answeredList.add(temp);
             }
 
@@ -327,8 +328,8 @@ public class Institution {
             nsee.printStackTrace();
         }
 
-
     }
+
 
     public void insertExam(String examName, Date startDate, Date endDate, Connection con){
 
@@ -348,14 +349,11 @@ public class Institution {
             s.printStackTrace();
         }
 
-
     }
 
     public void insertQuestion(Connection con, String examName, String questionDescription, String questionAnswer, Integer score){
 
         try{
-
-
 
             PreparedStatement PrepStatement  = con.prepareStatement("SELECT exam_id from EXAM where exam_name = ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             PrepStatement.setString(1,examName);
@@ -369,7 +367,7 @@ public class Institution {
             PrepStat.setString(2,questionDescription);
             PrepStat.setString(3,questionAnswer);
             PrepStat.setInt(4,score);
-            PrepStat.executeUpdate();
+            PrepStat.execute();
 
 
         }catch(SQLException s){
@@ -379,6 +377,123 @@ public class Institution {
 
     }
 
+    public void addQuestion(Connection con, Exam exam, String question, String questionAnswer, Integer score) {
+
+        try {
+
+             PreparedStatement pS = con.prepareStatement("INSERT INTO QUESTION values(1, ?, ?, ?, ?)");
+             pS.setInt(1, exam.getID(con));
+             pS.setString(2, question);
+             pS.setString(3, questionAnswer);
+             pS.setInt(4, score);
+             pS.execute();
+
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+    }
+
+    public void editQuestion(Connection con, Exam exam, Question actualQuestion, String question, String questionAnswer, Integer score) {
+
+        try {
+
+            PreparedStatement pS = con.prepareStatement("UPDATE QUESTION SET question_q = ? AND question_a = ? AND question_grade = ? WHERE question_id = ? AND exam_id = ?");
+            pS.setString(1, question);
+            pS.setString(2, questionAnswer);
+            pS.setInt(3, score);
+            pS.setInt(4, actualQuestion.getPosition());
+            pS.setInt(5, exam.getID(con));
+            pS.executeUpdate();
+
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+    }
+
+    public void wipeExam(Connection con, Exam exam) {
+
+        try {
+
+            PreparedStatement pS = con.prepareStatement("DELETE FROM QUESTION where exam_id = ?");
+            pS.setInt(1, exam.getID(con));
+            pS.execute();
+
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+    }
+
+
+    public ArrayList<Question> viewQuestions(Connection con, Exam exam) {
+
+        ArrayList<Question> questionList = new ArrayList<Question>();
+
+        int examID = exam.getID(con);
+
+        try {
+
+            PreparedStatement pS2 = con.prepareStatement("SELECT question_id, question_q, question_a, question_grade FROM QUESTION WHERE exam_id = ?");
+            pS2.setInt(1, examID);
+            ResultSet rS2 = pS2.executeQuery();
+            while (rS2.next()) {
+                int questionID = rS2.getInt(1);
+                String question = rS2.getString(2);
+                String answer= rS2.getString(3);
+                int grade = rS2.getInt(4);
+                Question tempQuestion = new Question(questionID, question, answer, grade);
+                questionList.add(tempQuestion);
+            }
+
+        } catch (SQLException sqle2) {
+            sqle2.printStackTrace();
+
+        }
+
+        return questionList;
+    }
+
+
+    void editExamEndDate(Connection con, Exam exam, Date endDate) {
+
+    try {
+
+        int examID = exam.getID(con);
+
+        PreparedStatement pS = con.prepareStatement("UPDATE EXAM SET exam_end = ? WHERE exam_id = ?");
+        pS.setDate(1, endDate);
+        pS.setInt(2, examID);
+        pS.executeQuery();
+
+    } catch (SQLException sqle) {
+
+        sqle.printStackTrace();
+
+    }
+
+
+    }
+    void editExamStartDate(Connection con, Exam exam, Date startDate) {
+
+        try {
+
+            int examID = exam.getID(con);
+
+            PreparedStatement pS = con.prepareStatement("UPDATE EXAM SET exam_start = ? WHERE exam_id = ?");
+            pS.setDate(1, startDate);
+            pS.setInt(2, examID);
+            pS.executeQuery();
+
+        } catch (SQLException sqle) {
+
+            sqle.printStackTrace();
+
+        }
+
+
+    }
 
 
 
